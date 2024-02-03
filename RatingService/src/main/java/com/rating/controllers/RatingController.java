@@ -13,8 +13,8 @@ package com.rating.controllers;
   org.springframework.web.bind.annotation.RequestMapping; import
   org.springframework.web.bind.annotation.RestController;
   
-  import com.rating.entities.Rating; import
-  com.rating.service.RatingServiceImpl;
+  import com.rating.entities.Rating;
+import com.rating.service.RatingServiceImpl;
   
   @RequestMapping("/ratings")
   
