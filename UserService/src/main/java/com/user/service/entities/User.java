@@ -1,8 +1,12 @@
 package com.user.service.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +30,8 @@ public class User {
 	private String about;
 	@Column
 	private String email;
+	@Transient
+	private List<Rating> ratings=new ArrayList();
 	
 	
 	

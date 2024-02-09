@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.user.service.entities.Rating;
 import com.user.service.entities.User;
+import com.user.service.external.service.RatingService;
 import com.user.service.userservice.UserServiceImpl;
 
 @RestController
@@ -23,7 +25,8 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	
-	
+	@Autowired
+	private RatingService ratingService;
 	
 	//Storing the user in the database
 	@PostMapping
@@ -41,8 +44,22 @@ public class UserController {
 	//Getting user with specific Id
 	@GetMapping("/{userId}")
 	public ResponseEntity<User> getUser(@PathVariable String userId){
-		User u=this.userServiceImpl.getUser(userId);
-		return new ResponseEntity<User>(u,HttpStatus.OK);
+		
+		User user=this.userServiceImpl.getUser(userId);
+		System.out.println("Get User Handler");
+		//Get the ratings of the particular user
+		List<Rating> ratings=this.ratingService.getAllRatings(user.getUserId());
+		System.out.println("Hello ratings"+ratings);
+		//Set the ratings of the user
+		user.setRatings(ratings);
+		
+		
+		
+		
+		
+		
+		
+		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 	
 	
