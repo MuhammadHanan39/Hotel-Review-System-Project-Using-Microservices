@@ -1,5 +1,6 @@
 package com.user.service.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.user.service.entities.Rating;
 import com.user.service.entities.User;
@@ -28,6 +30,8 @@ public class UserController {
 	@Autowired
 	private RatingService ratingService;
 	
+	@Autowired
+	private RestTemplate restTemplate;
 	//Storing the user in the database
 	@PostMapping
 	public ResponseEntity<User> saveUser(@RequestBody User user){
@@ -41,18 +45,31 @@ public class UserController {
 		return new ResponseEntity<List<User>>(this.userServiceImpl.getAllUser(),HttpStatus.OK);
 	}
 	
+	
+	
+	
+	
 	//Getting user with specific Id
 	@GetMapping("/{userId}")
 	public ResponseEntity<User> getUser(@PathVariable String userId){
 		
 		User user=this.userServiceImpl.getUser(userId);
 		System.out.println("Get User Handler");
-		//Get the ratings of the particular user
-		List<Rating> ratings=this.ratingService.getAllRatings(user.getUserId());
+		
+		
+		
+//		//Get the ratings of the particular user
+//		ArrayList<Rating> ratings2 = this.restTemplate.getForObject("http://RATING-SERVICE/ratings/user/"+user.getUserId(), ArrayList.class);
+//		System.out.println(ratings2);
+//		
+//		
+		
+		
+		List<Rating> ratings=(ArrayList<Rating>) this.ratingService.getAllRatings(user.getUserId());
 		System.out.println("Hello ratings"+ratings);
+		
 		//Set the ratings of the user
 		user.setRatings(ratings);
-		
 		
 		
 		

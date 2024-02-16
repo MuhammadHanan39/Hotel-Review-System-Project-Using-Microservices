@@ -1,5 +1,6 @@
 package com.user.service.external.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,7 @@ public interface RatingService {
 	
 	
 	@GetMapping("/ratings/user/{userId}")
-	public List<Rating> getAllRatings(@PathVariable String userId);
+	public ArrayList<Rating> getAllRatings(@PathVariable String userId);
 	
 	
 	
