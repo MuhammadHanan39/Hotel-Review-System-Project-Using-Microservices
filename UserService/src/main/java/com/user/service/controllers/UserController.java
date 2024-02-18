@@ -2,6 +2,7 @@ package com.user.service.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.user.service.entities.Hotel;
 import com.user.service.entities.Rating;
 import com.user.service.entities.User;
+import com.user.service.external.service.HotelService;
 import com.user.service.external.service.RatingService;
 import com.user.service.userservice.UserServiceImpl;
 
@@ -29,6 +32,9 @@ public class UserController {
 	
 	@Autowired
 	private RatingService ratingService;
+	
+	@Autowired
+	private HotelService hotelService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -61,21 +67,25 @@ public class UserController {
 //		//Get the ratings of the particular user
 //		ArrayList<Rating> ratings2 = this.restTemplate.getForObject("http://RATING-SERVICE/ratings/user/"+user.getUserId(), ArrayList.class);
 //		System.out.println(ratings2);
-//		
-//		
+	
 		
 		
 		List<Rating> ratings=(ArrayList<Rating>) this.ratingService.getAllRatings(user.getUserId());
 		System.out.println("Hello ratings"+ratings);
 		
+		
+		
+		List<Rating> ratingsWithHotels= ratings.stream().map(rating ->{
+			Hotel hotel= this.hotelService.getHotelWithId(rating.getHotelId());
+			rating.setHotel(hotel);
+			return rating;
+		}).collect(Collectors.toList());
+		
+		System.out.println(ratingsWithHotels);
+		
+		
 		//Set the ratings of the user
-		user.setRatings(ratings);
-		
-		
-		
-		
-		
-		
+		user.setRatings(ratingsWithHotels);
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 	
